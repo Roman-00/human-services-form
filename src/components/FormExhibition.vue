@@ -1,0 +1,477 @@
+<template>
+  <form
+    ref="form"
+    id="form-summet"
+    class="form-delegate-summit"
+    @submit.prevent="sendForm"
+  >
+    <div
+      v-for="field in fields"
+      :key="field.id"
+      class="form-delegate-summit__group"
+    >
+      <label :for="field.id" class="form-delegate-summit__label">
+        {{ field.label }}
+      </label>
+      <input
+        ref="inputForm"
+        :type="field.type"
+        :id="field.id"
+        v-model="postData[field.model]"
+        class="form-delegate-summit__input"
+        :placeholder="field.placeholder"
+      />
+      <span ref="textError" class="form-delegate-summit__text-error" />
+      <img
+        src="@/assets/error-icon.svg"
+        alt="error"
+        class="form-delegate-summit__error-img"
+      />
+    </div>
+
+    <div class="form-delegate-summit__checkbox">
+      <input
+        v-model="isChecked"
+        type="checkbox"
+        id="checkbox-summit"
+        class="form-delegate-summit__checkbox"
+      />
+      <label for="checkbox-summit">
+        Я согласен с условиями обработки персональных данных
+      </label>
+    </div>
+
+    <button class="form-delegate-summit__button button-submit">
+      Зарегистрироваться
+    </button>
+  </form>
+</template>
+
+<script>
+import axios from "axios";
+const regexpEmail =
+  /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+
+export default {
+  name: "form-exhibition",
+  data() {
+    return {
+      status: 0,
+      isChecked: false,
+      isValid: false,
+      isLoading: false,
+      fields: [
+        {
+          id: "user-first-name",
+          label: "Ваше Имя",
+          type: "text",
+          model: "userFirstName",
+          placeholder: "Анна",
+        },
+        {
+          id: "user-last-name",
+          label: "Ваша Фамилия",
+          type: "text",
+          model: "userLastName",
+          placeholder: "Васильева",
+        },
+        {
+          id: "user-position",
+          label: "Ваша Должность",
+          type: "text",
+          model: "userPosition",
+          placeholder: "Корреспондент",
+        },
+        {
+          id: "user-email",
+          label: "Ваш E-mail",
+          type: "email",
+          model: "userEmail",
+          placeholder: "vasileva@gmail.com",
+        },
+        {
+          id: "user-phone",
+          label: "Ваш Телефон",
+          type: "phone",
+          model: "userPhone",
+          placeholder: "77073455656",
+        },
+        {
+          id: "user-name-company",
+          label: "Название Компании",
+          type: "text",
+          model: "userNameCompany",
+          placeholder: "ИП Васильева",
+        },
+        {
+          id: "user-country",
+          label: "Страна",
+          type: "text",
+          model: "userCountry",
+          placeholder: "Казахстан",
+        },
+        {
+          id: "user-city",
+          label: "Город",
+          type: "text",
+          model: "userCity",
+          placeholder: "Нур-Султан",
+        },
+        {
+          id: "user-legal-address",
+          label: "Юридический адрес",
+          type: "text",
+          model: "userLegalAddress",
+          placeholder: "Нур-Султан, ул. Гагарина, дом 32",
+        },
+        {
+          id: "user-bin",
+          label: "БИН",
+          type: "text",
+          model: "userBin",
+          placeholder: "012354780901",
+        },
+      ],
+      postData: {
+        valuationForm: "Стать делегатом Саммита",
+        userFirstName: "",
+        userLastName: "",
+        userPosition: "",
+        userEmail: "",
+        userPhone: "",
+        userNameCompany: "",
+        userCountry: "",
+        userCity: "",
+        userLegalAddress: "",
+        userBin: "",
+      },
+      errorMessage: "",
+      textSendMessage: "",
+    };
+  },
+  mounted() {
+    this.validateForm();
+  },
+  methods: {
+    /**
+     * * Валидируем форму перед отправкой данных
+     */
+    validateForm() {
+      /**
+       * * Получаем поля и пишем проверки
+       *
+       * @param elem {HTML Element}
+       */
+      const validate = (elem) => {
+        if (
+          elem.id === "user-first-name" ||
+          elem.id === "user-last-name" ||
+          elem.id === "user-position" ||
+          elem.id === "user-name-company" ||
+          elem.id === "user-country" ||
+          elem.id === "user-city" ||
+          elem.id === "user-legal-address" ||
+          elem.id === "user-bin"
+        ) {
+          if (elem.value === "") {
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.remove("form-delegate-summit__group-succes");
+            elem.nextElementSibling.innerText =
+              "Данное поле обязательно для заполнения!";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-errors");
+          } else {
+            elem.nextElementSibling.innerText = "";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.remove("form-delegate-summit__group-errors");
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-succes");
+          }
+        }
+
+        /**
+         * * Валидируем поле E-mail
+         */
+        if (elem.id === "user-email") {
+          if (elem.value === "") {
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.remove("form-delegate-summit__group-succes");
+            elem.nextElementSibling.innerText =
+              "Данное поле обязательно для заполнения!";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-errors");
+          } else if (!regexpEmail.test(elem.value) && elem.value !== "") {
+            elem.nextElementSibling.innerText = "Введите корректный E-mail*";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-errors");
+          } else {
+            elem.nextElementSibling.innerText = "";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.remove("form-delegate-summit__group-errors");
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-succes");
+          }
+        }
+
+        /**
+         * * Валидируем поле с Телефоном
+         */
+        if (elem.id === "user-phone") {
+          if (elem.value === "") {
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.remove("form-delegate-summit__group-succes");
+            elem.nextElementSibling.innerText =
+              "Данное поле обязательно для заполнения!";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-errors");
+          } else if (elem.value.length <= 3) {
+            elem.nextElementSibling.innerText = `Поле телефон состоит больше чем ${
+              elem.value.length
+            } ${elem.value.length > 1 ? "цифры" : "цифра"}!`;
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-errors");
+          } else if (elem.value.length > 3) {
+            elem.nextElementSibling.innerText =
+              "Подсказка введите номер телефона как показано тут '77072560606'";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-errors");
+          } else {
+            elem.nextElementSibling.innerText = "";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.remove("form-delegate-summit__group-errors");
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-succes");
+          }
+
+          if (elem.value.length > 11) {
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.remove("form-delegate-summit__group-succes");
+            elem.nextElementSibling.innerText =
+              "В поле номер телефона состоит из 11 цифр";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-errors");
+          } else {
+            elem.nextElementSibling.innerText = "";
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.remove("form-delegate-summit__group-errors");
+            elem
+              .closest(".form-delegate-summit__group")
+              .classList.add("form-delegate-summit__group-succes");
+          }
+        }
+      };
+
+      this.$refs.inputForm.forEach((elem) => {
+        elem.addEventListener("blur", () => {
+          validate(elem);
+        });
+      });
+    },
+
+    /**
+     * * Отправляем данные на почту и в телеграм канал
+     */
+    async sendForm() {
+      this.$refs.inputForm.forEach((elem) => {
+        if (elem.value === "") {
+          this.isValid = false;
+          elem
+            .closest(".form-delegate-summit__group")
+            .classList.remove("form-delegate-summit__group-succes");
+          elem.nextElementSibling.innerText =
+            "Данное поле обязательно для заполнения!";
+          elem
+            .closest(".form-delegate-summit__group")
+            .classList.add("form-delegate-summit__group-errors");
+        } else {
+          this.isValid = true;
+          elem.nextElementSibling.innerText = "";
+          elem
+            .closest(".form-delegate-summit__group")
+            .classList.remove("form-delegate-summit__group-errors");
+          elem
+            .closest(".form-delegate-summit__group")
+            .classList.add("form-delegate-summit__group-succes");
+        }
+      });
+
+      if (!this.isChecked) {
+        alert(
+          "Пожалуйста согласитесь с уловиями обработки персональных данных!"
+        );
+      }
+      if (!this.isChecked && !this.validateForm() && !this.isValid) return;
+
+      this.isLoading = true;
+      this.status = 1;
+      this.textSendMessage = "Идет отправка данных";
+
+      await fetch("telegram.php", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.postData),
+      });
+
+      await axios
+        .post("mailer.php", this.postData)
+        .then((responce) => {
+          if (responce.status == 200) {
+            this.isLoading = false;
+            this.status = 2;
+            this.textSendMessage =
+              "Заявка успешно отправлена, мы свяжемся с вами в ближайшее время";
+          }
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          this.status = 3;
+          this.textSendMessage =
+            "Ваша заявка не отправлена, Пожалуйста попробуйте снова";
+          console.log(error);
+        });
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.form-delegate-summit {
+  padding: 20px 0;
+  color: #1a1a1a;
+
+  &__label {
+    position: absolute;
+    top: -5px;
+    left: 15px;
+    display: inline-block;
+    padding: 0 8px;
+    font-size: 10px;
+    line-height: 12px;
+    background: #fff;
+    z-index: 2;
+  }
+
+  &__input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 38px;
+    padding: 0 22px;
+    border: 1px solid rgba(#1c1819, 0.2);
+    border-radius: 4px;
+
+    &:focus {
+      border: 1px solid rgba(0, 123, 255, 0.7);
+    }
+
+    &::placeholder {
+      font-size: 12px;
+      line-height: 20px;
+      color: rgba(#1c1819, 0.2);
+    }
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    label {
+      font-size: 12px;
+      line-height: 16px;
+      color: rgba(#1a1a1a, 0.7);
+    }
+
+    input {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      border: 1px solid rgba(#1c1819, 0.2);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 280px;
+    margin: 30px auto 0;
+    padding: 12px 0;
+    background: #007bff;
+    font-size: 12px;
+    line-height: 14px;
+    text-transform: uppercase;
+    color: #fff;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  &__error-img {
+    position: absolute;
+    top: 36%;
+    right: 16px;
+    transform: translateY(-45%);
+    visibility: hidden;
+  }
+
+  &__text-error {
+    display: flex;
+    align-items: center;
+    min-height: 14px;
+    font-size: 10px;
+    line-height: 12px;
+    color: #ff3333;
+  }
+}
+
+.form-delegate-summit__group {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.form-delegate-summit__group-errors {
+  input {
+    border: 1px solid #ff3333;
+  }
+
+  .form-delegate-summit__error-img {
+    visibility: visible;
+  }
+}
+
+.form-delegate-summit__group-succes {
+  input {
+    border: 1px solid #28a745;
+  }
+
+  .form-delegate-summit__error-img {
+    visibility: hidden;
+  }
+}
+</style>
