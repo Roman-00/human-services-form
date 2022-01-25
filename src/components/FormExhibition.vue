@@ -1,65 +1,77 @@
 <template>
-  <form
-    ref="form"
-    id="form-summet"
-    class="form-delegate-summit"
-    @submit.prevent="sendForm"
-  >
-    <div
-      v-for="field in fields"
-      :key="field.id"
-      class="form-delegate-summit__group"
+  <div class="container">
+    <form
+      ref="form"
+      id="form-summet"
+      class="form-delegate-summit"
+      @submit.prevent="sendForm"
     >
-      <label :for="field.id" class="form-delegate-summit__label">
-        {{ field.label }}
-      </label>
-      <input
-        ref="inputForm"
-        :type="field.type"
-        :id="field.id"
-        v-model="postData[field.model]"
-        class="form-delegate-summit__input"
-        :placeholder="field.placeholder"
-      />
-      <span ref="textError" class="form-delegate-summit__text-error" />
-      <img
-        src="@/assets/error-icon.svg"
-        alt="error"
-        class="form-delegate-summit__error-img"
-      />
-    </div>
+      <div
+        v-for="field in fields"
+        :key="field.id"
+        class="form-delegate-summit__group"
+      >
+        <label :for="field.id" class="form-delegate-summit__label">
+          {{ field.label }}
+        </label>
+        <input
+          ref="inputForm"
+          :type="field.type"
+          :id="field.id"
+          v-model="postData[field.model]"
+          class="form-delegate-summit__input"
+          :placeholder="field.placeholder"
+        />
+        <span ref="textError" class="form-delegate-summit__text-error" />
+        <img
+          src="@/assets/error-icon.svg"
+          alt="error"
+          class="form-delegate-summit__error-img"
+        />
+      </div>
 
-    <div class="form-delegate-summit__checkbox">
-      <input
-        v-model="isChecked"
-        type="checkbox"
-        id="checkbox-summit"
-        class="form-delegate-summit__checkbox"
-      />
-      <label for="checkbox-summit">
-        Я согласен с условиями обработки персональных данных
-      </label>
-    </div>
+      <div class="form-delegate-summit__checkbox">
+        <input
+          v-model="isChecked"
+          type="checkbox"
+          id="checkbox-summit"
+          class="form-delegate-summit__checkbox"
+        />
+        <label for="checkbox-summit">
+          Я согласен с условиями обработки персональных данных
+        </label>
+      </div>
 
-    <button class="form-delegate-summit__button button-submit">
-      Зарегистрироваться
-    </button>
-  </form>
+      <button class="form-delegate-summit__button button-submit">
+        Зарегистрироваться
+      </button>
+    </form>
+    <modal-status
+      v-show="modalShow"
+      :statusModal="status"
+      @sendForm="sendForm"
+      @close="modalShow = !modalShow"
+    >
+    </modal-status>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
+import ModalStatus from "@/components/ModalStatus.vue";
 const regexpEmail =
   /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 
 export default {
   name: "form-exhibition",
+  components: { ModalStatus },
   data() {
     return {
       status: 0,
       isChecked: false,
       isValid: false,
       isLoading: false,
+      modalShow: false,
       fields: [
         {
           id: "user-first-name",
@@ -320,6 +332,7 @@ export default {
       }
       if (!this.isChecked && !this.validateForm() && !this.isValid) return;
 
+      this.modalShow = true;
       this.isLoading = true;
       this.status = 1;
       this.textSendMessage = "Идет отправка данных";
@@ -337,6 +350,7 @@ export default {
         .post("mailer.php", this.postData)
         .then((responce) => {
           if (responce.status == 200) {
+            this.modalShow = true;
             this.isLoading = false;
             this.status = 2;
             this.textSendMessage =
@@ -344,6 +358,7 @@ export default {
           }
         })
         .catch((error) => {
+          this.modalShow = true;
           this.isLoading = false;
           this.status = 3;
           this.textSendMessage =
@@ -357,6 +372,7 @@ export default {
 
 <style lang="scss" scoped>
 .form-delegate-summit {
+  position: relative;
   padding: 20px 0;
   color: #1a1a1a;
 
