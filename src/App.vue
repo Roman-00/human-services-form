@@ -36,6 +36,10 @@ input:focus {
   outline: none;
 }
 
+select:focus {
+  outline: none;
+}
+
 h1,
 h2,
 h3,

@@ -30,52 +30,6 @@
         />
       </div>
 
-      <div ref="formGroupSelect" class="form-delegate-summit__group-select">
-        <label for="form-selected">Сфера</label>
-        <select id="form-selected" v-model="postData.selected">
-          <option disabled value="">Выберите один из вариантов</option>
-          <option>Государственные органы</option>
-          <option>Дипломатические и консульские представительства</option>
-          <option>Неправительственные организации</option>
-          <option>Профессиональные союзы и ассоциации</option>
-          <option>Институты развития</option>
-          <option>Пищевая промышленность</option>
-          <option>Транспорт и логистика</option>
-          <option>IT и телекоммуникации</option>
-          <option>Топливная промышленность</option>
-          <option>Энергетика</option>
-          <option>Машиностроение</option>
-          <option>
-            Здравоохранение, физическая культура и социальное обеспечение
-          </option>
-          <option>Образование</option>
-          <option>Культура и искусство</option>
-          <option>Наука и научное обслуживание</option>
-          <option>Финансы, кредит, страхование, пенсионное обеспечение</option>
-          <option>Строительство и архитектура</option>
-          <option>Консалтинг</option>
-          <option>СМИ</option>
-        </select>
-        <span ref="textErrorSelect" class="form-delegate-summit__text-error" />
-      </div>
-
-      <div
-        ref="formGroupSelectPartisipation"
-        class="form-delegate-summit__group-select"
-      >
-        <label for="form-selected">Форма участия</label>
-        <select id="form-selected" v-model="postData.partisipation">
-          <option disabled value="">Выберите один из вариантов</option>
-          <option>Спонсор</option>
-          <option>Делегат</option>
-          <option>Со стендом</option>
-        </select>
-        <span
-          ref="textErrorSelectPartisipation"
-          class="form-delegate-summit__text-error"
-        />
-      </div>
-
       <div class="form-delegate-summit__checkbox">
         <input
           v-model="isChecked"
@@ -109,7 +63,7 @@ const regexpEmail =
   /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 
 export default {
-  name: "form-exhibition",
+  name: "form-summit",
   components: { ModalStatus },
   data() {
     return {
@@ -191,7 +145,7 @@ export default {
         },
       ],
       postData: {
-        valuationForm: "Заявка на участие в выставке",
+        valuationForm: "Стать делегатом Саммита",
         userFirstName: "",
         userLastName: "",
         userPosition: "",
@@ -202,8 +156,6 @@ export default {
         userCity: "",
         userLegalAddress: "",
         userBin: "",
-        selected: "",
-        partisipation: "",
       },
       errorMessage: "",
       textSendMessage: "",
@@ -373,42 +325,6 @@ export default {
         }
       });
 
-      if (this.postData.selected === "") {
-        this.isValid = false;
-        this.$refs.formGroupSelect.classList.remove(
-          "form-group-select-sucsess"
-        );
-        this.$refs.formGroupSelect.classList.add("form-group-select-errors");
-        this.$refs.textErrorSelectPartisipation.innerText =
-          "Вы не выбрали Форму участия";
-      } else {
-        this.isValid = true;
-        this.$refs.formGroupSelect.classList.remove("form-group-select-errors");
-        this.$refs.formGroupSelect.classList.add("form-group-select-sucsess");
-        this.$refs.textErrorSelectPartisipation.innerText = "";
-      }
-
-      if (this.postData.partisipation === "") {
-        this.isValid = false;
-        this.$refs.formGroupSelectPartisipation.classList.remove(
-          "form-group-select-sucsess"
-        );
-        this.$refs.formGroupSelectPartisipation.classList.add(
-          "form-group-select-errors"
-        );
-        this.$refs.textErrorSelect.innerText =
-          "Вы не выбрали сферу деятельности";
-      } else {
-        this.isValid = true;
-        this.$refs.formGroupSelectPartisipation.classList.remove(
-          "form-group-select-errors"
-        );
-        this.$refs.formGroupSelectPartisipation.classList.add(
-          "form-group-select-sucsess"
-        );
-        this.$refs.textErrorSelect.innerText = "";
-      }
-
       if (!this.isChecked) {
         alert(
           "Пожалуйста согласитесь с уловиями обработки персональных данных!"
@@ -553,32 +469,6 @@ export default {
     line-height: 12px;
     color: #ff3333;
   }
-
-  &__group-select {
-    position: relative;
-    margin-bottom: 10px;
-
-    select {
-      position: relative;
-      width: 100%;
-      min-height: 38px;
-      padding: 0 22px;
-      border: 1px solid rgba(#1c1819, 0.2);
-      border-radius: 4px;
-    }
-
-    label {
-      position: absolute;
-      top: -5px;
-      left: 15px;
-      display: inline-block;
-      padding: 0 8px;
-      font-size: 10px;
-      line-height: 12px;
-      background: #fff;
-      z-index: 2;
-    }
-  }
 }
 
 .form-delegate-summit__group {
@@ -603,18 +493,6 @@ export default {
 
   .form-delegate-summit__error-img {
     visibility: hidden;
-  }
-}
-
-.form-group-select-errors {
-  select {
-    border: 1px solid #ff3333;
-  }
-}
-
-.form-group-select-sucsess {
-  select {
-    border: 1px solid #28a745;
   }
 }
 </style>
