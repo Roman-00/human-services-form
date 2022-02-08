@@ -373,13 +373,9 @@ export default {
 <style lang="scss" scoped>
 .form-delegate-summit {
   position: relative;
+  height: 100%;
   padding: 20px 0;
   color: #1a1a1a;
-
-  @media screen and (max-width: 1190px) {
-    height: 400px;
-    overflow: scroll;
-  }
 
   &__label {
     position: absolute;
