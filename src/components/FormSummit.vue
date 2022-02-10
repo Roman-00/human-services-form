@@ -337,14 +337,14 @@ export default {
       this.status = 1;
       this.textSendMessage = "Идет отправка данных";
 
-      /* await fetch("telegram.php", {
+      await fetch("telegram.php", {
         method: "POST",
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(this.postData),
-      });*/
+      });
 
       await axios
         .post("send.php", this.postData)
