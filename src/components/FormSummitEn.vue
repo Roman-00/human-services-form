@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2 class="form-title">Стать делегатом Саммита</h2>
+    <h2 class="form-title">To become a summit delegate</h2>
     <form
       ref="form"
       id="form-summet"
@@ -39,12 +39,12 @@
           class="form-delegate-summit__checkbox"
         />
         <label for="checkbox-summit">
-          Я согласен с условиями обработки персональных данных
+          I agree with the terms of personal data processing
         </label>
       </div>
 
       <button class="form-delegate-summit__button button-submit">
-        Зарегистрироваться
+        sign up
       </button>
     </form>
     <modal-status
@@ -64,7 +64,7 @@ const regexpEmail =
   /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 
 export default {
-  name: "form-summit",
+  name: "form-summit-en",
   components: { ModalStatus },
   data() {
     return {
@@ -76,70 +76,70 @@ export default {
       fields: [
         {
           id: "user-first-name",
-          label: "Ваше Имя",
+          label: "Name",
           type: "text",
           model: "userFirstName",
-          placeholder: "Анна",
+          placeholder: "Anna",
         },
         {
           id: "user-last-name",
-          label: "Ваша Фамилия",
+          label: "Surname",
           type: "text",
           model: "userLastName",
-          placeholder: "Васильева",
+          placeholder: "Vasilieva",
         },
         {
           id: "user-position",
-          label: "Ваша Должность",
+          label: "Position",
           type: "text",
           model: "userPosition",
-          placeholder: "Корреспондент",
+          placeholder: "Reporter",
         },
         {
           id: "user-email",
-          label: "Ваш E-mail",
+          label: "E-mail",
           type: "email",
           model: "userEmail",
           placeholder: "vasileva@gmail.com",
         },
         {
           id: "user-phone",
-          label: "Ваш Телефон",
+          label: "Phone",
           type: "phone",
           model: "userPhone",
           placeholder: "77073455656",
         },
         {
           id: "user-name-company",
-          label: "Название Компании",
+          label: "Company name",
           type: "text",
           model: "userNameCompany",
-          placeholder: "ИП Васильева",
+          placeholder: "IP Vasilyeva",
         },
         {
           id: "user-country",
-          label: "Страна",
+          label: "Country",
           type: "text",
           model: "userCountry",
-          placeholder: "Казахстан",
+          placeholder: "Kazakstan",
         },
         {
           id: "user-city",
-          label: "Город",
+          label: "Town",
           type: "text",
           model: "userCity",
-          placeholder: "Нур-Султан",
+          placeholder: "Nur-Sultan",
         },
         {
           id: "user-legal-address",
-          label: "Юридический адрес",
+          label: "Legal address",
           type: "text",
           model: "userLegalAddress",
-          placeholder: "Нур-Султан, ул. Гагарина, дом 32",
+          placeholder: "Nur-Sultan, st. Gagarina, house 32",
         },
         {
           id: "user-bin",
-          label: "БИН",
+          label: "BIN",
           type: "text",
           model: "userBin",
           placeholder: "012354780901",
@@ -190,8 +190,7 @@ export default {
             elem
               .closest(".form-delegate-summit__group")
               .classList.remove("form-delegate-summit__group-succes");
-            elem.nextElementSibling.innerText =
-              "Данное поле обязательно для заполнения!";
+            elem.nextElementSibling.innerText = "This field is required!";
             elem
               .closest(".form-delegate-summit__group")
               .classList.add("form-delegate-summit__group-errors");
@@ -214,13 +213,12 @@ export default {
             elem
               .closest(".form-delegate-summit__group")
               .classList.remove("form-delegate-summit__group-succes");
-            elem.nextElementSibling.innerText =
-              "Данное поле обязательно для заполнения!";
+            elem.nextElementSibling.innerText = "This field is required!";
             elem
               .closest(".form-delegate-summit__group")
               .classList.add("form-delegate-summit__group-errors");
           } else if (!regexpEmail.test(elem.value) && elem.value !== "") {
-            elem.nextElementSibling.innerText = "Введите корректный E-mail*";
+            elem.nextElementSibling.innerText = "Please enter a valid E-mail*";
             elem
               .closest(".form-delegate-summit__group")
               .classList.add("form-delegate-summit__group-errors");
@@ -243,21 +241,20 @@ export default {
             elem
               .closest(".form-delegate-summit__group")
               .classList.remove("form-delegate-summit__group-succes");
-            elem.nextElementSibling.innerText =
-              "Данное поле обязательно для заполнения!";
+            elem.nextElementSibling.innerText = "This field is required!";
             elem
               .closest(".form-delegate-summit__group")
               .classList.add("form-delegate-summit__group-errors");
           } else if (elem.value.length <= 3) {
-            elem.nextElementSibling.innerText = `Поле телефон состоит больше чем ${
+            elem.nextElementSibling.innerText = `The telephone field consists of more than ${
               elem.value.length
-            } ${elem.value.length > 1 ? "цифры" : "цифра"}!`;
+            } ${elem.value.length > 1 ? "numeral" : "numeral"}!`;
             elem
               .closest(".form-delegate-summit__group")
               .classList.add("form-delegate-summit__group-errors");
           } else if (elem.value.length > 3) {
             elem.nextElementSibling.innerText =
-              "Подсказка введите номер телефона как показано тут '77072560606'";
+              "Hint enter phone number as shown here '77072560606'";
             elem
               .closest(".form-delegate-summit__group")
               .classList.add("form-delegate-summit__group-errors");
@@ -276,7 +273,7 @@ export default {
               .closest(".form-delegate-summit__group")
               .classList.remove("form-delegate-summit__group-succes");
             elem.nextElementSibling.innerText =
-              "В поле номер телефона состоит из 11 цифр";
+              "The phone number field consists of 11 digits";
             elem
               .closest(".form-delegate-summit__group")
               .classList.add("form-delegate-summit__group-errors");
@@ -309,8 +306,7 @@ export default {
           elem
             .closest(".form-delegate-summit__group")
             .classList.remove("form-delegate-summit__group-succes");
-          elem.nextElementSibling.innerText =
-            "Данное поле обязательно для заполнения!";
+          elem.nextElementSibling.innerText = "This field is required!";
           elem
             .closest(".form-delegate-summit__group")
             .classList.add("form-delegate-summit__group-errors");
@@ -327,16 +323,14 @@ export default {
       });
 
       if (!this.isChecked) {
-        alert(
-          "Пожалуйста согласитесь с уловиями обработки персональных данных!"
-        );
+        alert("Please agree to the terms of personal data processing!");
       }
       if (!this.isChecked || (!this.validateForm() && !this.isValid)) return;
 
       this.modalShow = true;
       this.isLoading = true;
       this.status = 1;
-      this.textSendMessage = "Идет отправка данных";
+      this.textSendMessage = "Sending data";
 
       await fetch("telegram.php", {
         method: "POST",
@@ -355,7 +349,7 @@ export default {
             this.isLoading = false;
             this.status = 2;
             this.textSendMessage =
-              "Заявка успешно отправлена, мы свяжемся с вами в ближайшее время";
+              "Application successfully sent, we will contact you shortly";
           }
         })
         .catch((error) => {
@@ -363,7 +357,7 @@ export default {
           this.isLoading = false;
           this.status = 3;
           this.textSendMessage =
-            "Ваша заявка не отправлена, Пожалуйста попробуйте снова";
+            "Your request has not been sent, please try again";
           console.log(error);
         });
     },

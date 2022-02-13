@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h2 class="form-title">Заявка на участие в выставке</h2>
     <form
       ref="form"
       id="form-summet"
@@ -455,6 +456,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.form-title {
+  padding-top: 10px;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+}
 .form-delegate-summit {
   position: relative;
   height: 100%;
