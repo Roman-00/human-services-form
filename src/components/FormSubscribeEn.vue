@@ -44,7 +44,7 @@
       </div>
 
       <button class="form-delegate-summit__button button-submit">
-        sign up
+        Subscribe
       </button>
     </form>
     <modal-status
