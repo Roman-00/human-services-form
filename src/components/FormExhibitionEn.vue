@@ -32,7 +32,7 @@
       </div>
 
       <div ref="formGroupSelect" class="form-delegate-summit__group-select">
-        <label for="form-selected">Сфера</label>
+        <label for="form-selected">Sphere</label>
         <select id="form-selected" v-model="postData.selected">
           <option disabled value="">Choose one of the options</option>
           <option>State bodies</option>
@@ -66,7 +66,7 @@
         <select id="form-selected" v-model="postData.partisipation">
           <option disabled value="">Choose one of the options</option>
           <option>Sponsor</option>
-          <option>Spokes</option>
+          <option>Speaker</option>
           <option>Stand</option>
         </select>
         <span
@@ -176,7 +176,7 @@ export default {
         },
         {
           id: "user-legal-address",
-          label: "Юридический адрес",
+          label: "Legal address",
           type: "text",
           model: "userLegalAddress",
           placeholder: "Nur-Sultan, st. Gagarina, house 32",
